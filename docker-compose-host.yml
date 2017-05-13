@@ -1,0 +1,26 @@
+version: "2.1"
+
+services:
+  credentials:
+    volumes:
+      - /edx/app/credentials/credentials/credentials/assets/
+      - /edx/app/credentials/credentials/credentials/static/bundles/
+      - /edx/app/credentials/credentials/node_modules/
+      - ${DEVSTACK_WORKSPACE}/credentials:/edx/app/credentials/credentials
+  discovery:
+      volumes:
+      - /edx/app/discovery/discovery/course_discovery/assets/
+      - /edx/app/discovery/discovery/course_discovery/static/bower_components/
+      - /edx/app/discovery/discovery/course_discovery/static/build/
+      - /edx/app/discovery/discovery/node_modules/
+      - ${DEVSTACK_WORKSPACE}/course-discovery:/edx/app/discovery/discovery
+  lms:
+    volumes:
+      - /edx/app/edxapp/edx-platform/.prereqs_cache/
+      - /edx/app/edxapp/edx-platform/node_modules/
+      - ${DEVSTACK_WORKSPACE}/edx-platform:/edx/app/edxapp/edx-platform
+  studio:
+    volumes:
+      - /edx/app/edxapp/edx-platform/.prereqs_cache/
+      - /edx/app/edxapp/edx-platform/node_modules/
+      - ${DEVSTACK_WORKSPACE}/edx-platform:/edx/app/edxapp/edx-platform

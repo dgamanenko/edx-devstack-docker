@@ -39,9 +39,9 @@ do
             git clone --depth 1 $remote
         else
             if [ -z "${commit_hash}" ]; then
-                git clone --depth 1 $remote -b $branch
+                git clone $remote -b $branch
             else
-                git clone --depth 1 $remote -b $branch
+                git clone $remote -b $branch
                 cd $name
                 git reset --hard $commit_hash
                 cd ..

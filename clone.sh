@@ -17,10 +17,10 @@ fi
 repos=(
     "https://github.com/edx/course-discovery.git"
     "https://github.com/edx/credentials.git"
-    "https://github.com/edx/edx-platform.git"
+    "https://github.com/edx/edx-platform.git:master:9c6d94ada0f2b401aeb5c41b3dbf31a912a80840"
 )
 
-name_pattern="(https):\/\/(.*)\/(.*)\/(.*).(git):{0,1}(.*)"
+name_pattern="(https):\/\/(.*)\/(.*)\/(.*).(git):{0,1}([^:]+){0,}:{0,1}(.*)"
 
 for repo in ${repos[*]}
 do
@@ -29,16 +29,23 @@ do
     [[ $repo =~ $name_pattern ]]
     name="${BASH_REMATCH[4]}"
     branch="${BASH_REMATCH[6]}"
+    commit_hash="${BASH_REMATCH[7]}"
     remote="${BASH_REMATCH[1]}://${BASH_REMATCH[2]}/${BASH_REMATCH[3]}/${BASH_REMATCH[4]}.${BASH_REMATCH[5]}"
 
-echo $remote
     if [ -d "$name" ]; then
         printf "The [%s] repo is already checked out. Continuing.\n" $name
     else
         if [ -z "${branch}" ]; then
             git clone --depth 1 $remote
         else
-            git clone --depth 1 $remote -b $branch
+            if [ -z "${commit_hash}" ]; then
+                git clone --depth 1 $remote -b $branch
+            else
+                git clone --depth 1 $remote -b $branch
+                cd $name
+                git reset --hard $commit_hash
+                cd ..
+            fi
         fi
     fi
 done
